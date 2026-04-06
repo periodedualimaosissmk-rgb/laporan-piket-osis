@@ -3,9 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Laporan Piket</title>
-    <link rel="icon" type="image/gif" href="https://cdn.yupra.my.id/yp/dc9y33vh.jpg">
-    <link rel="stylesheet" href="https://rafkasatriya61.github.io/pusat-css/piketosis.css">
+    <title>Sistem Laporan Piket OSIS</title>
+    <link rel="icon" type="image/jpeg" href="https://cdn.yupra.my.id/yp/dc9y33vh.jpg">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Latar belakang diperbarui dengan ikon, ditambah efek gelap transparan agar teks tetap terbaca */
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('https://cdn.yupra.my.id/yp/dc9y33vh.jpg') no-repeat center center fixed;
+            background-size: cover; height: 100vh; display: flex; justify-content: center; align-items: center;
+        }
+
+        .container { width: 100%; max-width: 400px; padding: 20px; }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 30px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); text-align: center; color: white; transition: all 0.4s ease;
+        }
+
+        h2 { margin-bottom: 20px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+        input[type="text"], input[type="password"] {
+            width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9); color: #333; font-size: 14px; outline: none; transition: 0.3s;
+        }
+        input:focus { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
+
+        .password-wrapper { position: relative; }
+        .toggle-eye { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #333; }
+
+        button {
+            width: 100%; padding: 14px; margin-top: 15px; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #25D366, #128C7E); color: white; font-weight: 600;
+            font-size: 14px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
+        
+        .btn-secondary { background: rgba(255, 255, 255, 0.2); color: #fff; box-shadow: none; }
+        .btn-logout { background: #ff4757; box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); }
+        .btn-dev { background: #3498db; display: none; margin-top: 10px; }
+
+        .forgot-password { display: block; margin-top: 15px; font-size: 0.85rem; color: #ddd; cursor: pointer; text-decoration: underline; }
+
+        /* Styling dikembalikan seperti form awal (Radio & Checkbox) */
+        .form-group { text-align: left; margin: 15px 0; font-size: 14px; }
+        .radio-group { display: flex; justify-content: space-between; background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-top: 5px; }
+        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        
+        .check-group { background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-top: 5px; }
+        .check-item { display: block; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+        #manage-account { display: none; }
+
+        #notification {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            min-width: 300px; padding: 15px 25px; border-radius: 50px;
+            display: flex; align-items: center; gap: 12px; color: white; font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 9999; transition: 0.5s ease;
+        }
+        #notification.show { bottom: 40px; }
+    </style>
 </head>
 <body>
 
@@ -14,15 +74,31 @@
             <h2>Piket Login</h2>
             <form id="login-form">
                 <input type="text" id="username" placeholder="Username Petugas" required>
-                
                 <div class="password-wrapper">
                     <input type="password" id="password" placeholder="Password" required>
-                    <span id="eye-icon" class="toggle-eye">👁️</span>
+                    <span class="toggle-eye" onclick="togglePass('password')">👁️</span>
                 </div>
-                
-                <button type="submit">Masuk</button>
-                <a id="btn-lupa-pass" class="forgot-password">Lupa Password? Hubungi Bot</a>
+                <button type="submit" id="btn-login">Masuk Sistem</button>
+                <a class="forgot-password" onclick="showManageAccount()">Lupa / Ganti Password?</a>
             </form>
+        </div>
+    </div>
+
+    <div id="manage-account" class="container">
+        <div class="glass-effect">
+            <h2>Kelola Akun</h2>
+            <p style="font-size: 12px; margin-bottom: 15px;">Masukkan data sesuai jadwal piketmu.</p>
+            <input type="text" id="manage-user" placeholder="Username" required>
+            <input type="text" id="manage-hari" placeholder="Hari Piket (ex: Senin)" required>
+            
+            <button type="button" onclick="lihatPassword()" id="btn-lihat" class="btn-secondary">Lihat Password</button>
+            
+            <div id="div-new-pass" style="display:none; margin-top: 15px;">
+                <input type="text" id="manage-new-pass" placeholder="Ketik Password Baru">
+                <button type="button" onclick="gantiPassword()" id="btn-ganti">Simpan Password Baru</button>
+            </div>
+
+            <button type="button" class="btn-secondary" onclick="showLogin()" style="margin-top: 10px;">Kembali ke Login</button>
         </div>
     </div>
 
@@ -30,7 +106,7 @@
         <div class="glass-effect">
             <h2>Laporan Pelanggaran</h2>
             <form id="report-form">
-                <input type="text" id="nama" placeholder="Nama Siswa" required>
+                <input type="text" id="nama" placeholder="Nama Siswa Lengkap" required>
 
                 <div class="form-group">
                     <label>Kelas:</label>
@@ -50,29 +126,223 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Jenis Pelanggaran:</label>
-                    <div class="check-item"><input type="checkbox" name="pelanggaran" value="Terlambat"> Terlambat</div>
-                    <div class="check-item"><input type="checkbox" name="pelanggaran" value="Kaos kaki tidak sesuai"> Kaos Kaki Tidak Sesuai</div>
-                    <div class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai topi"> Tidak Memakai Topi (Senin)</div>
-                    <div class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai dasi"> Tidak Memakai Dasi (Senin)</div>
-                    <div class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai badge"> Tidak Memakai Badge (Senin)</div>
-                </div>
+               <div class="form-group">
+    <label>Jenis Pelanggaran:</label>
+    <div class="check-group">
+        <label class="check-item"><input type="checkbox" name="pelanggaran" value="Terlambat"> Terlambat</label>
+        
+        <div id="area-senin" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.3);">
+            <span style="font-size: 11px; color: #25D366; display:block; margin-bottom: 5px;">Atribut Upacara (Khusus Senin):</span>
+            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Kaos kaki tidak sesuai"> Kaos Kaki Tidak Sesuai</label>
+            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai topi"> Tidak Memakai Topi</label>
+            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai dasi"> Tidak Memakai Dasi</label>
+            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai badge"> Tidak Memakai Badge</label>
+        </div>
+    </div>
+</div>
 
-                <input type="text" id="pelanggaran-lain" placeholder="Pelanggaran lainnya...">
+                <input type="text" id="pelanggaran-lain" placeholder="Pelanggaran lainnya (opsional)...">
 
-                <button type="submit" id="btn-submit" class="btn-send">Kirim Laporan</button>
-                <button type="button" id="wa-error-btn" onclick="laporWA()">💬 Laporan Gagal, Hubungi Dev</button>
-                <button type="button" onclick="location.reload()" class="btn-logout">Logout</button>
+                <button type="submit" id="btn-submit">🚀 Kirim Laporan</button>
+                <button type="button" id="wa-error-btn" class="btn-dev" onclick="laporWA()">💬 Laporan Gagal, Hubungi Dev</button>
+                <button type="button" onclick="location.reload()" class="btn-logout">Keluar Akun</button>
             </form>
         </div>
     </div>
 
-    <div id="notification">
-        <span id="notif-icon">✅</span> 
-        <span id="notif-message">Pesan</span>
-    </div>
+    <div id="notification"><span id="notif-icon">✅</span> <span id="notif-message">Pesan</span></div>
 
-    <script src="https://rafkasatriya61.github.io/pusat-js/piket-osis.js"></script>
+    <script>
+        // URL Web App
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyDktAfr8a60X4mg7jFIgtAbblSVAu7y6w6DsJnmyYF3DrVWV_bcHaTwM9cqgCw9r77/exec'; 
+        const nomorAdmin = "6285178399532"; // Nomor dev untuk tombol lapor
+
+        const databaseWali = {
+            "10-TKR": "628999809547", "10-MP": "628xxx", "10-TKJ": "628xxx",
+            "11-TKR": "628xxx", "11-TKJ": "628xxx", "11-MP": "628xxx",
+            "12-TKR": "628xxx", "12-TKJ": "628xxx", "12-MP": "628xxx"
+        };
+
+        let currentUser = "";
+
+        // Fungsi Deteksi Hari Senin Saat Halaman Dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            const hariIni = new Date().getDay(); // 0: Minggu, 1: Senin, 2: Selasa, dst
+            if (hariIni === 1) {
+                document.getElementById('area-senin').style.display = 'block';
+            }
+        });
+
+        // UI Helpers
+        function showNotification(success, msg) {
+            const notif = document.getElementById('notification');
+            const waBtn = document.getElementById('wa-error-btn');
+            
+            notif.style.background = success ? "#25D366" : "#ff4757";
+            document.getElementById('notif-icon').textContent = success ? "✅" : "❌";
+            document.getElementById('notif-message').textContent = msg;
+            notif.classList.add('show');
+            setTimeout(() => notif.classList.remove('show'), 4500);
+
+            // Munculkan tombol Lapor WA jika pengiriman gagal
+            if (!success && msg.includes("Gagal")) {
+                waBtn.style.display = "block";
+            } else {
+                waBtn.style.display = "none";
+            }
+        }
+
+        function togglePass(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function showManageAccount() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('manage-account').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('manage-account').style.display = 'none';
+            document.getElementById('login-page').style.display = 'block';
+        }
+
+        function laporWA() {
+            const text = "Halo Dev, sistem laporan Piket OSIS sedang bermasalah / gagal mengirim data ke database.";
+            window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        // Auth & Manage Pass (Sama seperti versi sebelumnya)
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-login');
+            btn.innerText = "⏳ Memeriksa..."; btn.disabled = true;
+
+            const uName = document.getElementById('username').value;
+            const uPass = document.getElementById('password').value;
+
+            try {
+                const res = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "login", username: uName, password: uPass })
+                });
+                const data = await res.json();
+                
+                if(data.status === "success") {
+                    currentUser = uName;
+                    document.getElementById('login-page').style.display = 'none';
+                    document.getElementById('report-page').style.display = 'block';
+                    showNotification(true, `Selamat bertugas, ${uName}!`);
+                } else {
+                    showNotification(false, data.message);
+                }
+            } catch(e) { showNotification(false, "Gangguan jaringan. Coba lagi."); }
+            btn.innerText = "Masuk Sistem"; btn.disabled = false;
+        });
+
+        async function lihatPassword() {
+            const uName = document.getElementById('manage-user').value;
+            const uHari = document.getElementById('manage-hari').value;
+            if(!uName || !uHari) return showNotification(false, "Isi Username & Hari Piket!");
+
+            const btn = document.getElementById('btn-lihat');
+            btn.innerText = "Mencari...";
+            
+            try {
+                const res = await fetch(`${scriptURL}?action=searchPass&nama=${uName}&hari=${uHari}`);
+                const data = await res.json();
+                
+                if(data.status === "success") {
+                    showNotification(true, `Password ditemukan!`);
+                    document.getElementById('div-new-pass').style.display = 'block';
+                    document.getElementById('manage-new-pass').value = data.pass; 
+                } else {
+                    showNotification(false, data.message);
+                }
+            } catch(e) { showNotification(false, "Gagal koneksi ke server."); }
+            btn.innerText = "Lihat Password";
+        }
+
+        async function gantiPassword() {
+            const uName = document.getElementById('manage-user').value;
+            const uHari = document.getElementById('manage-hari').value;
+            const newPass = document.getElementById('manage-new-pass').value;
+            if(!newPass) return showNotification(false, "Password tidak boleh kosong!");
+
+            const btn = document.getElementById('btn-ganti');
+            btn.innerText = "Menyimpan...";
+            
+            try {
+                const res = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "changePass", username: uName, hari: uHari, newPass: newPass })
+                });
+                const data = await res.json();
+                showNotification(data.status === "success", data.message);
+                if(data.status === "success") setTimeout(showLogin, 2000);
+            } catch(e) { showNotification(false, "Gagal menyimpan password."); }
+            btn.innerText = "Simpan Password Baru";
+        }
+
+        // Fitur Kirim Data Laporan
+        document.getElementById('report-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.innerHTML = "⏳ Mengirim..."; btnSubmit.disabled = true;
+            document.getElementById('wa-error-btn').style.display = "none"; // Sembunyikan tombol error saat mencoba
+
+            const dSiswa = document.getElementById('nama').value;
+            // Ambil data dari Radio Button
+            const dKelasElem = document.querySelector('input[name="kelas"]:checked');
+            const dJurusanElem = document.querySelector('input[name="jurusan"]:checked');
+            
+            if(!dKelasElem || !dJurusanElem) {
+                showNotification(false, "Pilih Kelas dan Jurusan!");
+                btnSubmit.innerHTML = "🚀 Kirim Laporan"; btnSubmit.disabled = false;
+                return;
+            }
+
+            const dKelas = dKelasElem.value;
+            const dJurusan = dJurusanElem.value;
+            
+            let dPelanggaran = Array.from(document.querySelectorAll('input[name="pelanggaran"]:checked')).map(i => i.value);
+            const dLain = document.getElementById('pelanggaran-lain').value;
+            if(dLain) dPelanggaran.push(dLain);
+
+            if(dPelanggaran.length === 0) {
+                showNotification(false, "Pilih minimal 1 pelanggaran!");
+                btnSubmit.innerHTML = "🚀 Kirim Laporan"; btnSubmit.disabled = false;
+                return;
+            }
+
+            const kunciTujuan = `${dKelas}-${dJurusan}`;
+            const nWali = databaseWali[kunciTujuan] || "-";
+
+            const d = new Date();
+            const pad = (n) => n.toString().padStart(2, '0');
+            const waktuSekarang = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+            const payload = {
+                action: "add", waktu: waktuSekarang, siswa: dSiswa, kelas: dKelas, jurusan: dJurusan,
+                pelanggaran: dPelanggaran.join(', '), petugas: currentUser, nomorWali: nWali
+            };
+
+            try {
+                const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+                const data = await res.json();
+                
+                if(data.status === "success") {
+                    showNotification(true, data.message);
+                    document.getElementById('report-form').reset();
+                } else {
+                    showNotification(false, "Gagal mengirim data. Coba hubungi Dev.");
+                }
+            } catch (error) { 
+                showNotification(false, "Gagal mengirim data. Cek koneksi internet."); 
+            }
+            btnSubmit.innerHTML = "🚀 Kirim Laporan"; btnSubmit.disabled = false;
+        });
+    </script>
 </body>
 </html>
