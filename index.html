@@ -11,12 +11,11 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Poppins', sans-serif;
-            /* Latar belakang diperbarui dengan ikon, ditambah efek gelap transparan agar teks tetap terbaca */
             background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('https://cdn.yupra.my.id/yp/dc9y33vh.jpg') no-repeat center center fixed;
-            background-size: cover; height: 100vh; display: flex; justify-content: center; align-items: center;
+            background-size: cover; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px;
         }
 
-        .container { width: 100%; max-width: 400px; padding: 20px; }
+        .container { width: 100%; max-width: 400px; }
         
         .glass-effect {
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -24,13 +23,13 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); text-align: center; color: white; transition: all 0.4s ease;
         }
 
-        h2 { margin-bottom: 20px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        h2 { margin-bottom: 20px; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 22px; }
 
-        input[type="text"], input[type="password"] {
+        input[type="text"], input[type="password"], select {
             width: 100%; padding: 14px; margin: 10px 0; border: none; border-radius: 10px;
-            background: rgba(255, 255, 255, 0.9); color: #333; font-size: 14px; outline: none; transition: 0.3s;
+            background: rgba(255, 255, 255, 0.95); color: #333; font-size: 14px; outline: none; transition: 0.3s;
         }
-        input:focus { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
+        input:focus, select:focus { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); }
 
         .password-wrapper { position: relative; }
         .toggle-eye { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #333; }
@@ -38,26 +37,36 @@
         button {
             width: 100%; padding: 14px; margin-top: 15px; border: none; border-radius: 10px;
             background: linear-gradient(135deg, #25D366, #128C7E); color: white; font-weight: 600;
-            font-size: 14px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            font-size: 15px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
         }
         button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6); }
-        
         .btn-secondary { background: rgba(255, 255, 255, 0.2); color: #fff; box-shadow: none; }
         .btn-logout { background: #ff4757; box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4); }
-        .btn-dev { background: #3498db; display: none; margin-top: 10px; }
 
-        .forgot-password { display: block; margin-top: 15px; font-size: 0.85rem; color: #ddd; cursor: pointer; text-decoration: underline; }
-
-        /* Styling dikembalikan seperti form awal (Radio & Checkbox) */
         .form-group { text-align: left; margin: 15px 0; font-size: 14px; }
-        .radio-group { display: flex; justify-content: space-between; background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-top: 5px; }
-        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #25D366; }
         
-        .check-group { background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 10px; margin-top: 5px; }
-        .check-item { display: block; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .flex-row { display: flex; gap: 10px; }
+        .flex-row select { margin: 0; }
+
+        .type-selector { display: flex; gap: 10px; margin-bottom: 15px; }
+        .type-btn { 
+            flex: 1; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 10px; color: white; cursor: pointer; transition: 0.3s; font-size: 13px; font-weight: 600;
+        }
+        .type-btn.active { background: #25D366; border-color: #25D366; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); }
+
+        .search-wrapper { position: relative; width: 100%; }
+        .dropdown-list {
+            position: absolute; top: 100%; left: 0; right: 0; background: #fff; color: #333;
+            border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 150px; overflow-y: auto;
+            z-index: 100; display: none; text-align: left; margin-top: 5px;
+        }
+        .dropdown-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #eee; font-size: 13px; }
+        .dropdown-item:hover { background: #f1f1f1; color: #25D366; font-weight: 600; }
+        .dropdown-item:last-child { border-bottom: none; }
 
         #manage-account { display: none; }
-
         #notification {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             min-width: 300px; padding: 15px 25px; border-radius: 50px;
@@ -79,7 +88,7 @@
                     <span class="toggle-eye" onclick="togglePass('password')">👁️</span>
                 </div>
                 <button type="submit" id="btn-login">Masuk Sistem</button>
-                <a class="forgot-password" onclick="showManageAccount()">Lupa / Ganti Password?</a>
+                <a class="forgot-password" onclick="showManageAccount()" style="display: block; margin-top: 15px; font-size: 0.85rem; color: #ddd; cursor: pointer; text-decoration: underline;">Lupa / Ganti Password?</a>
             </form>
         </div>
     </div>
@@ -87,64 +96,61 @@
     <div id="manage-account" class="container">
         <div class="glass-effect">
             <h2>Kelola Akun</h2>
-            <p style="font-size: 12px; margin-bottom: 15px;">Masukkan data sesuai jadwal piketmu.</p>
             <input type="text" id="manage-user" placeholder="Username" required>
             <input type="text" id="manage-hari" placeholder="Hari Piket (ex: Senin)" required>
-            
             <button type="button" onclick="lihatPassword()" id="btn-lihat" class="btn-secondary">Lihat Password</button>
-            
             <div id="div-new-pass" style="display:none; margin-top: 15px;">
                 <input type="text" id="manage-new-pass" placeholder="Ketik Password Baru">
                 <button type="button" onclick="gantiPassword()" id="btn-ganti">Simpan Password Baru</button>
             </div>
-
             <button type="button" class="btn-secondary" onclick="showLogin()" style="margin-top: 10px;">Kembali ke Login</button>
         </div>
     </div>
 
     <div id="report-page" class="container" style="display: none;">
         <div class="glass-effect">
-            <h2>Laporan Pelanggaran</h2>
+            <h2>Laporan Disiplin</h2>
+            
+            <div class="type-selector">
+                <div class="type-btn active" id="btn-terlambat" onclick="pilihTipe('Terlambat')">🏃‍♂️ Terlambat</div>
+                <div class="type-btn" id="btn-lainnya" onclick="pilihTipe('Lainnya')">📝 Pelanggaran Lain</div>
+            </div>
+
             <form id="report-form">
-                <input type="text" id="nama" placeholder="Nama Siswa Lengkap" required>
+                <div id="area-pelanggaran-lain" class="form-group" style="display: none;">
+                    <label>Detail Pelanggaran:</label>
+                    <input type="text" id="input-pelanggaran" placeholder="Contoh: Topi, Dasi, Baju Dikeluarkan">
+                </div>
 
                 <div class="form-group">
-                    <label>Kelas:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="kelas" value="10" required> 10</label>
-                        <label><input type="radio" name="kelas" value="11"> 11</label>
-                        <label><input type="radio" name="kelas" value="12"> 12</label>
+                    <label>Kelas & Jurusan:</label>
+                    <div class="flex-row">
+                        <select id="kelas" required onchange="loadNamaSiswa()">
+                            <option value="" disabled selected>Kelas</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        <select id="jurusan" required onchange="loadNamaSiswa()">
+                            <option value="" disabled selected>Jurusan</option>
+                            <option value="TKR">TKR</option>
+                            <option value="TKJ">TKJ</option>
+                            <option value="MP">MP</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Jurusan:</label>
-                    <div class="radio-group">
-                        <label><input type="radio" name="jurusan" value="TKR" required> TKR</label>
-                        <label><input type="radio" name="jurusan" value="TKJ"> TKJ</label>
-                        <label><input type="radio" name="jurusan" value="MP"> MP</label>
+                    <label>Nama Siswa:</label>
+                    <div class="search-wrapper">
+                        <input type="text" id="search-nama" placeholder="Ketik nama siswa..." autocomplete="off" required onkeyup="filterNama()" onclick="showDropdown()">
+                        <div id="dropdown-nama" class="dropdown-list">
+                            <div class="dropdown-item" style="color:#888;">Pilih kelas & jurusan dulu</div>
+                        </div>
                     </div>
                 </div>
-
-               <div class="form-group">
-    <label>Jenis Pelanggaran:</label>
-    <div class="check-group">
-        <label class="check-item"><input type="checkbox" name="pelanggaran" value="Terlambat"> Terlambat</label>
-        
-        <div id="area-senin" style="display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.3);">
-            <span style="font-size: 11px; color: #25D366; display:block; margin-bottom: 5px;">Atribut Upacara (Khusus Senin):</span>
-            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Kaos kaki tidak sesuai"> Kaos Kaki Tidak Sesuai</label>
-            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai topi"> Tidak Memakai Topi</label>
-            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai dasi"> Tidak Memakai Dasi</label>
-            <label class="check-item"><input type="checkbox" name="pelanggaran" value="Tidak memakai badge"> Tidak Memakai Badge</label>
-        </div>
-    </div>
-</div>
-
-                <input type="text" id="pelanggaran-lain" placeholder="Pelanggaran lainnya (opsional)...">
 
                 <button type="submit" id="btn-submit">🚀 Kirim Laporan</button>
-                <button type="button" id="wa-error-btn" class="btn-dev" onclick="laporWA()">💬 Laporan Gagal, Hubungi Dev</button>
                 <button type="button" onclick="location.reload()" class="btn-logout">Keluar Akun</button>
             </form>
         </div>
@@ -153,43 +159,29 @@
     <div id="notification"><span id="notif-icon">✅</span> <span id="notif-message">Pesan</span></div>
 
     <script>
-        // URL Web App
+        // URL SCRIPT LAPORAN (Database 1)
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyDktAfr8a60X4mg7jFIgtAbblSVAu7y6w6DsJnmyYF3DrVWV_bcHaTwM9cqgCw9r77/exec'; 
-        const nomorAdmin = "6285178399532"; // Nomor dev untuk tombol lapor
+        
+        // ⚠️ SPREADSHEET ABSENSI SISWA (Database 2) ⚠️
+        const ID_SPREADSHEET_ABSEN = "12flkTGNFV6wjHRHCfSXS4FlLr6FpME5YKsJCH_pUMP8"; 
 
         const databaseWali = {
-            "10-TKR": "6281292838856", "10-MP": "6281281405132", "10-TKJ": "6281212967496",
-            "11-TKR": "6288809323951", "11-TKJ": "6289643336456", "11-MP": "6285281308102",
-            "12-TKR": "6285772163978", "12-TKJ": "6285319085990", "12-MP": "6288211631470"
+       "10-TKR": "6281292838856", "10-MP": "6281281405132", "10-TKJ": "6281212967496",
+       "11-TKR": "6288809323951", "11-TKJ": "6289643336456", "11-MP": "6285281308102",
+       "12-TKR": "6285772163978", "12-TKJ": "6285319085990", "12-MP": "6288211631470"
         };
 
         let currentUser = "";
+        let tipePelanggaran = "Terlambat";
+        let listSiswaTersedia = []; 
 
-        // Fungsi Deteksi Hari Senin Saat Halaman Dimuat
-        document.addEventListener("DOMContentLoaded", () => {
-            const hariIni = new Date().getDay(); // 0: Minggu, 1: Senin, 2: Selasa, dst
-            if (hariIni === 1) {
-                document.getElementById('area-senin').style.display = 'block';
-            }
-        });
-
-        // UI Helpers
         function showNotification(success, msg) {
             const notif = document.getElementById('notification');
-            const waBtn = document.getElementById('wa-error-btn');
-            
             notif.style.background = success ? "#25D366" : "#ff4757";
             document.getElementById('notif-icon').textContent = success ? "✅" : "❌";
             document.getElementById('notif-message').textContent = msg;
             notif.classList.add('show');
-            setTimeout(() => notif.classList.remove('show'), 4500);
-
-            // Munculkan tombol Lapor WA jika pengiriman gagal
-            if (!success && msg.includes("Gagal")) {
-                waBtn.style.display = "block";
-            } else {
-                waBtn.style.display = "none";
-            }
+            setTimeout(() => notif.classList.remove('show'), 4000);
         }
 
         function togglePass(id) {
@@ -207,12 +199,112 @@
             document.getElementById('login-page').style.display = 'block';
         }
 
-        function laporWA() {
-            const text = "Halo Dev, sistem laporan Piket OSIS sedang bermasalah / gagal mengirim data ke database.";
-            window.open(`https://wa.me/${nomorAdmin}?text=${encodeURIComponent(text)}`, '_blank');
+        function pilihTipe(tipe) {
+            tipePelanggaran = tipe;
+            document.getElementById('btn-terlambat').classList.toggle('active', tipe === 'Terlambat');
+            document.getElementById('btn-lainnya').classList.toggle('active', tipe === 'Lainnya');
+            
+            const areaLain = document.getElementById('area-pelanggaran-lain');
+            const inputLain = document.getElementById('input-pelanggaran');
+            
+            if (tipe === 'Lainnya') {
+                areaLain.style.display = 'block';
+                inputLain.required = true;
+            } else {
+                areaLain.style.display = 'none';
+                inputLain.required = false;
+                inputLain.value = "";
+            }
         }
 
-        // Auth & Manage Pass (Sama seperti versi sebelumnya)
+        // --- SISTEM TARIK DATA (CSV LINK LANGSUNG) ---
+        async function loadNamaSiswa() {
+            const kls = document.getElementById('kelas').value;
+            let jur = document.getElementById('jurusan').value;
+            const dropdown = document.getElementById('dropdown-nama');
+            const inputSearch = document.getElementById('search-nama');
+
+            inputSearch.value = ""; 
+
+            if (!kls || !jur) {
+                listSiswaTersedia = [];
+                dropdown.innerHTML = `<div class="dropdown-item" style="color:#888;">Pilih kelas & jurusan dulu</div>`;
+                return;
+            }
+
+            dropdown.innerHTML = `<div class="dropdown-item" style="color:#888;">⏳ Mengambil absen dari server...</div>`;
+            showDropdown();
+
+            // Auto-Correct Jurusan untuk sheet (TKR -> TKRO)
+            if (jur === "TKR") jur = "TKRO";
+            
+            const sheetName = `${kls} ${jur}`; // e.g., "10 TKRO"
+            
+            // Logika Posisi Baris & Kolom
+            const targetRange = (kls === "12") ? "B7:B" : "D2:D";
+
+            // URL Ajaib Google Sheets CSV (Sangat Cepat!)
+            const csvUrl = `https://docs.google.com/spreadsheets/d/${ID_SPREADSHEET_ABSEN}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}&range=${targetRange}&cache=${new Date().getTime()}`;
+
+            try {
+                const res = await fetch(csvUrl);
+                if (!res.ok) throw new Error("Gagal load");
+                
+                const text = await res.text();
+                
+                // Parse CSV: Pecah per baris, buang tanda kutip
+                let rawNames = text.split('\n').map(row => row.replace(/"/g, '').trim());
+                
+                // Bersihkan list (buang yang kosong atau teks Header)
+                listSiswaTersedia = rawNames.filter(n => n !== "" && !n.toLowerCase().includes("nama siswa") && n.toLowerCase() !== "nama");
+
+                if (listSiswaTersedia.length > 0) {
+                    renderDropdown(listSiswaTersedia);
+                } else {
+                    dropdown.innerHTML = `<div class="dropdown-item" style="color:#ff4757;">Data absen kosong. Cek nama sheet.</div>`;
+                }
+            } catch (error) {
+                dropdown.innerHTML = `<div class="dropdown-item" style="color:#ff4757;">❌ Gagal memuat absen. Pastikan file Google Sheet Publik.</div>`;
+            }
+        }
+
+        function renderDropdown(list) {
+            const dropdown = document.getElementById('dropdown-nama');
+            dropdown.innerHTML = "";
+            list.forEach(nama => {
+                const div = document.createElement('div');
+                div.className = 'dropdown-item';
+                div.textContent = nama;
+                div.onclick = () => pilihNama(nama);
+                dropdown.appendChild(div);
+            });
+        }
+
+        function filterNama() {
+            const search = document.getElementById('search-nama').value.toLowerCase();
+            const filtered = listSiswaTersedia.filter(n => n.toLowerCase().includes(search));
+            renderDropdown(filtered);
+            showDropdown();
+        }
+
+        function showDropdown() {
+            if(listSiswaTersedia.length > 0 || document.getElementById('dropdown-nama').innerHTML.includes('Mengambil')) {
+                document.getElementById('dropdown-nama').style.display = 'block';
+            }
+        }
+
+        function pilihNama(nama) {
+            document.getElementById('search-nama').value = nama;
+            document.getElementById('dropdown-nama').style.display = 'none';
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!document.querySelector('.search-wrapper').contains(e.target)) {
+                document.getElementById('dropdown-nama').style.display = 'none';
+            }
+        });
+
+        // --- SISTEM AUTH ---
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-login');
@@ -233,88 +325,29 @@
                     document.getElementById('login-page').style.display = 'none';
                     document.getElementById('report-page').style.display = 'block';
                     showNotification(true, `Selamat bertugas, ${uName}!`);
-                } else {
-                    showNotification(false, data.message);
-                }
-            } catch(e) { showNotification(false, "Gangguan jaringan. Coba lagi."); }
+                } else { showNotification(false, data.message); }
+            } catch(e) { showNotification(false, "Gangguan jaringan."); }
             btn.innerText = "Masuk Sistem"; btn.disabled = false;
         });
 
-        async function lihatPassword() {
-            const uName = document.getElementById('manage-user').value;
-            const uHari = document.getElementById('manage-hari').value;
-            if(!uName || !uHari) return showNotification(false, "Isi Username & Hari Piket!");
-
-            const btn = document.getElementById('btn-lihat');
-            btn.innerText = "Mencari...";
-            
-            try {
-                const res = await fetch(`${scriptURL}?action=searchPass&nama=${uName}&hari=${uHari}`);
-                const data = await res.json();
-                
-                if(data.status === "success") {
-                    showNotification(true, `Password ditemukan!`);
-                    document.getElementById('div-new-pass').style.display = 'block';
-                    document.getElementById('manage-new-pass').value = data.pass; 
-                } else {
-                    showNotification(false, data.message);
-                }
-            } catch(e) { showNotification(false, "Gagal koneksi ke server."); }
-            btn.innerText = "Lihat Password";
-        }
-
-        async function gantiPassword() {
-            const uName = document.getElementById('manage-user').value;
-            const uHari = document.getElementById('manage-hari').value;
-            const newPass = document.getElementById('manage-new-pass').value;
-            if(!newPass) return showNotification(false, "Password tidak boleh kosong!");
-
-            const btn = document.getElementById('btn-ganti');
-            btn.innerText = "Menyimpan...";
-            
-            try {
-                const res = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify({ action: "changePass", username: uName, hari: uHari, newPass: newPass })
-                });
-                const data = await res.json();
-                showNotification(data.status === "success", data.message);
-                if(data.status === "success") setTimeout(showLogin, 2000);
-            } catch(e) { showNotification(false, "Gagal menyimpan password."); }
-            btn.innerText = "Simpan Password Baru";
-        }
-
-        // Fitur Kirim Data Laporan
+        // --- KIRIM LAPORAN ---
         document.getElementById('report-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const btnSubmit = document.getElementById('btn-submit');
+            
+            const dNama = document.getElementById('search-nama').value.trim();
+            const dKelas = document.getElementById('kelas').value;
+            const dJurusan = document.getElementById('jurusan').value;
+            
+            let dPelanggaran = tipePelanggaran === "Lainnya" ? document.getElementById('input-pelanggaran').value : "Terlambat";
+
+            // Wajib dari list absen
+            if (!listSiswaTersedia.includes(dNama) && listSiswaTersedia.length > 0) {
+                showNotification(false, "⚠️ Harap pilih nama dari list absen!");
+                return;
+            }
+
             btnSubmit.innerHTML = "⏳ Mengirim..."; btnSubmit.disabled = true;
-            document.getElementById('wa-error-btn').style.display = "none"; // Sembunyikan tombol error saat mencoba
-
-            const dSiswa = document.getElementById('nama').value;
-            // Ambil data dari Radio Button
-            const dKelasElem = document.querySelector('input[name="kelas"]:checked');
-            const dJurusanElem = document.querySelector('input[name="jurusan"]:checked');
-            
-            if(!dKelasElem || !dJurusanElem) {
-                showNotification(false, "Pilih Kelas dan Jurusan!");
-                btnSubmit.innerHTML = "🚀 Kirim Laporan"; btnSubmit.disabled = false;
-                return;
-            }
-
-            const dKelas = dKelasElem.value;
-            const dJurusan = dJurusanElem.value;
-            
-            let dPelanggaran = Array.from(document.querySelectorAll('input[name="pelanggaran"]:checked')).map(i => i.value);
-            const dLain = document.getElementById('pelanggaran-lain').value;
-            if(dLain) dPelanggaran.push(dLain);
-
-            if(dPelanggaran.length === 0) {
-                showNotification(false, "Pilih minimal 1 pelanggaran!");
-                btnSubmit.innerHTML = "🚀 Kirim Laporan"; btnSubmit.disabled = false;
-                return;
-            }
 
             const kunciTujuan = `${dKelas}-${dJurusan}`;
             const nWali = databaseWali[kunciTujuan] || "-";
@@ -324,25 +357,56 @@
             const waktuSekarang = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 
             const payload = {
-                action: "add", waktu: waktuSekarang, siswa: dSiswa, kelas: dKelas, jurusan: dJurusan,
-                pelanggaran: dPelanggaran.join(', '), petugas: currentUser, nomorWali: nWali
+                action: "add", waktu: waktuSekarang, siswa: dNama, kelas: dKelas, jurusan: dJurusan,
+                pelanggaran: dPelanggaran, petugas: currentUser, nomorWali: nWali
             };
 
             try {
                 const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
                 const data = await res.json();
                 
-                if(data.status === "success") {
-                    showNotification(true, data.message);
-                    document.getElementById('report-form').reset();
-                } else {
-                    showNotification(false, "Gagal mengirim data. Coba hubungi Dev.");
-                }
-            } catch (error) { 
-                showNotification(false, "Gagal mengirim data. Cek koneksi internet."); 
-            }
+                if (data.status === "success") {
+                    showNotification(true, "✅ Laporan Berhasil Dikirim!");
+                    document.getElementById('search-nama').value = ""; 
+                    document.getElementById('input-pelanggaran').value = "";
+                } else { showNotification(false, "❌ Gagal kirim data."); }
+            } catch (error) { showNotification(false, "❌ Koneksi error."); }
+            
             btnSubmit.innerHTML = "🚀 Kirim Laporan"; btnSubmit.disabled = false;
         });
+
+        // Search dan ganti pass
+        async function lihatPassword() {
+            const uName = document.getElementById('manage-user').value;
+            const uHari = document.getElementById('manage-hari').value;
+            if(!uName || !uHari) return showNotification(false, "Isi Username & Hari!");
+            const btn = document.getElementById('btn-lihat'); btn.innerText = "Mencari...";
+            try {
+                const res = await fetch(`${scriptURL}?action=searchPass&nama=${uName}&hari=${uHari}`);
+                const data = await res.json();
+                if(data.status === "success") {
+                    showNotification(true, `Password ditemukan!`);
+                    document.getElementById('div-new-pass').style.display = 'block';
+                    document.getElementById('manage-new-pass').value = data.pass; 
+                } else { showNotification(false, data.message); }
+            } catch(e) { showNotification(false, "Gagal koneksi."); }
+            btn.innerText = "Lihat Password";
+        }
+
+        async function gantiPassword() {
+            const uName = document.getElementById('manage-user').value;
+            const uHari = document.getElementById('manage-hari').value;
+            const newPass = document.getElementById('manage-new-pass').value;
+            if(!newPass) return showNotification(false, "Password tidak boleh kosong!");
+            const btn = document.getElementById('btn-ganti'); btn.innerText = "Menyimpan...";
+            try {
+                const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ action: "changePass", username: uName, hari: uHari, newPass: newPass }) });
+                const data = await res.json();
+                showNotification(data.status === "success", data.message);
+                if(data.status === "success") setTimeout(showLogin, 2000);
+            } catch(e) { showNotification(false, "Gagal menyimpan."); }
+            btn.innerText = "Simpan Password Baru";
+        }
     </script>
 </body>
 </html>
